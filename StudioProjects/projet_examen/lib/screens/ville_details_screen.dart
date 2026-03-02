@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart'; // Import direct du fichier interne
 import 'package:projet_examen/models/config.dart';
 import 'package:projet_examen/models/ville.dart';
 
@@ -8,44 +9,25 @@ class VilleDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> meteoData;
 
   const VilleDetailsScreen({
-    Key? key,
+    super.key,
     required this.ville,
     required this.meteoData,
-  }) : super(key: key);
+  });
 
   @override
   State<VilleDetailsScreen> createState() => _VilleDetailsScreenState();
 }
 
 class _VilleDetailsScreenState extends State<VilleDetailsScreen> {
-  late GoogleMapController mapController;
   late LatLng _center;
-  Set<Marker> _markers = {};
-  bool _mapReady = false;
 
   @override
   void initState() {
     super.initState();
-    // Coordonnées par défaut ou récupérées de l'API
     _center = LatLng(
-      widget.meteoData['coord']['lat'],
-      widget.meteoData['coord']['lon'],
+      (widget.meteoData['coord']['lat'] as num).toDouble(),
+      (widget.meteoData['coord']['lon'] as num).toDouble(),
     );
-
-    _markers.add(
-      Marker(
-        markerId: MarkerId(widget.ville.nom),
-        position: _center,
-        infoWindow: InfoWindow(title: widget.ville.nom),
-      ),
-    );
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-    setState(() {
-      _mapReady = true;
-    });
   }
 
   // Détermine l'icône météo en fonction de la condition
@@ -138,7 +120,6 @@ class _VilleDetailsScreenState extends State<VilleDetailsScreen> {
                     ),
                   ],
                 ),
-                // Ajoutez d'autres informations météo selon besoin
                 if (widget.meteoData.containsKey('wind')) ...[
                   const SizedBox(height: 10),
                   Row(
@@ -164,28 +145,32 @@ class _VilleDetailsScreenState extends State<VilleDetailsScreen> {
             ),
           ),
 
-          // Carte Google Maps
+          // Carte OpenStreetMap
           Expanded(
-            child: Stack(
+            child: FlutterMap(
+              options: MapOptions(
+                initialCenter: _center,
+                initialZoom: 11.0,
+              ),
               children: [
-                GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  initialCameraPosition: CameraPosition(
-                    target: _center,
-                    zoom: 11.0,
-                  ),
-                  markers: _markers,
-                  myLocationEnabled: false,
-                  myLocationButtonEnabled: false,
-                  zoomControlsEnabled: true,
-                  mapType: MapType.normal,
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.projet_examen',
                 ),
-
-                // Indicateur de chargement
-                if (!_mapReady)
-                  const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: _center,
+                      width: 80,
+                      height: 80,
+                      child: const Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                        size: 40,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -194,3 +179,4 @@ class _VilleDetailsScreenState extends State<VilleDetailsScreen> {
     );
   }
 }
+
