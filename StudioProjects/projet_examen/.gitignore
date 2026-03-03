@@ -18,6 +18,12 @@ migrate_working_dir/
 *.iws
 .idea/
 
+# Variables d'environnement (clés API, secrets) - Ne jamais committer
+.env
+
+# Chemins SDK locaux (générés automatiquement par Android Studio/Flutter)
+android/local.properties
+
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.

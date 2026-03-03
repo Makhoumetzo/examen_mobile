@@ -4,43 +4,103 @@ import 'package:projet_examen/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 import '../widgets/waiting_message.dart';
 
-class SecondScreen extends StatefulWidget {
+class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key});
 
   @override
-  State<SecondScreen> createState() => _SecondScreenState();
-}
-
-class _SecondScreenState extends State<SecondScreen> {
-  @override
   Widget build(BuildContext context) {
     final themeManager = Provider.of<ThemeManager>(context);
-    final bool isDarkMode = themeManager.isDarkMode;
+    final isDark = themeManager.isDarkMode;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          'MétéoVision',
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: family,
-            fontWeight: FontWeight.bold,
-          ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.wb_sunny_rounded,
+                color: Colors.amber.shade300, size: 20),
+            const SizedBox(width: 8),
+            const Text(
+              'MétéoVision',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: family,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              isDarkMode ? Icons.light_mode : Icons.dark_mode,
-              color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: GestureDetector(
+              onTap: () => themeManager.toggleTheme(),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.25),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      isDark ? 'Clair' : 'Sombre',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: family,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            onPressed: () {
-              themeManager.toggleTheme();
-            },
           ),
         ],
       ),
-      body: const Center(
-        child: WaitingMessage(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: isDark
+                ? const [Color(0xFF0A0E1A), Color(0xFF141929), Color(0xFF1B2B50)]
+                : const [Color(0xFF1E3A8A), Color(0xFF2563EB), Color(0xFF38BDF8)],
+          ),
+        ),
+        child: Center(
+          child: WaitingMessage(
+            onRestart: () {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (c, a1, a2) => const SecondScreen(),
+                  transitionsBuilder: (c, anim, a2, child) =>
+                      FadeTransition(opacity: anim, child: child),
+                  transitionDuration: const Duration(milliseconds: 400),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
