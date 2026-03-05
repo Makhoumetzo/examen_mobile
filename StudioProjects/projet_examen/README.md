@@ -1,84 +1,95 @@
-# 🌤️ MétéoVision
+# MétéoVision 🌤️
 
-Application Flutter de météo en temps réel pour 5 villes mondiales avec carte interactive.
+> Application mobile Flutter de météo en temps réel — Projet de groupe
 
-## 🚀 Prérequis
+---
 
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) ≥ 3.7.0
-- [Android Studio](https://developer.android.com/studio) avec le plugin Flutter installé
-- Un compte [OpenWeatherMap](https://openweathermap.org/api) pour obtenir une clé API gratuite
+## 👥 Auteurs
 
-## ⚙️ Installation
+- Khadidiatou Diouf
+- Mouhammadou Makhtar Diop
+- Mamadou Mbaye
 
-### 1. Cloner le projet
+---
+
+## 📱 Présentation
+
+**MétéoVision** est une application mobile développée avec Flutter qui affiche les conditions météorologiques en temps réel de 5 grandes villes du monde. Elle propose un design moderne avec support du mode sombre/clair, des animations Lottie et une carte interactive OpenStreetMap.
+
+---
+
+## �️ Technologies utilisées
+
+- **Framework** : Flutter (Dart)
+- **API** : [OpenWeatherMap](https://openweathermap.org/api)
+- **Carte** : flutter_map + OpenStreetMap
+- **Gestion d'état** : Provider
+- **Animations** : Lottie
+
+---
+
+## ⚙️ Installation et lancement
+
+### Première fois (clone)
 
 ```bash
-git clone <url-du-repo>
-cd projet_examen
-```
-
-### 2. Installer les dépendances
-
-```bash
+git clone https://github.com/Khadija2212/examen_mobile.git
+cd examen_mobile/StudioProjects/projet_examen
 flutter pub get
+flutter run
 ```
 
-> Flutter génère automatiquement le fichier `android/local.properties` avec tes chemins SDK lors du premier `flutter pub get` ou `flutter run`. **Tu n'as pas besoin de le créer manuellement.**
-
-### 3. Configurer la clé API
-
-Copier le fichier d'exemple et renseigner ta clé :
+### Mise à jour (projet déjà cloné)
 
 ```bash
-cp .env.example .env
+git pull
+flutter pub get
+flutter run
 ```
 
-Ouvrir `.env` et remplacer `REMPLACER_PAR_VOTRE_CLE_API` par ta vraie clé OpenWeatherMap.
+> Si vous rencontrez des erreurs, essayez :
+> ```bash
+> flutter clean
+> flutter pub get
+> flutter run
+> ```
 
-### 4. Lancer l'application
-
-**Méthode recommandée (avec la clé API) :**
-
-```bash
-flutter run --dart-define=OPENWEATHER_API_KEY=ta_cle_api_ici
-```
-
-**Via Android Studio :**
-
-1. Ouvrir `Run > Edit Configurations`
-2. Dans le champ **Additional run args**, ajouter :
-   ```
-   --dart-define=OPENWEATHER_API_KEY=ta_cle_api_ici
-   ```
-3. Cliquer sur **Run** ▶️
+---
 
 ## 📁 Structure du projet
 
 ```
 lib/
-├── main.dart                    # Point d'entrée
+├── main.dart
 ├── models/
-│   ├── app_config.dart          # Configuration (clé API)
-│   ├── config.dart              # Constantes globales
-│   └── ville.dart               # Modèle Ville
+│   ├── config.dart               # Constantes (couleurs, polices)
+│   └── ville.dart                # Modèle Ville
 ├── services/
-│   └── weather_service.dart     # Appels API OpenWeatherMap
+│   └── weather_service.dart      # Appels API OpenWeatherMap
 ├── theme/
-│   └── theme_manager.dart       # Gestion thème clair/sombre
+│   └── theme_manager.dart        # Thème clair / sombre
 ├── screens/
-│   ├── home_screen.dart         # Écran d'accueil
-│   ├── second_screen.dart       # Écran principal
+│   ├── home_screen.dart          # Écran d'accueil
+│   ├── second_screen.dart        # Écran principal
 │   └── ville_details_screen.dart # Détails + Carte
 └── widgets/
-    ├── waiting_message.dart     # Chargement & résultats
-    └── meteo_table.dart         # Tableau des villes
+    ├── waiting_message.dart      # Chargement & résultats
+    └── meteo_table.dart          # Liste des villes
 ```
 
-## 🎨 Fonctionnalités
+---
 
-- ✅ Météo en temps réel via OpenWeatherMap
-- ✅ 5 villes : Dakar, Paris, Tokyo, New York, London
-- ✅ Carte interactive OpenStreetMap / CartoDB Dark
-- ✅ Mode sombre / clair avec toggle
-- ✅ Animations Lottie
-- ✅ Gestion des erreurs réseau
+## � Villes disponibles
+
+🇸🇳 Dakar · 🇫🇷 Paris · 🇯🇵 Tokyo · 🇺🇸 New York · 🇬🇧 London
+
+---
+
+## ✨ Fonctionnalités
+
+- Météo en temps réel via OpenWeatherMap
+- Carte interactive centrée sur la ville sélectionnée
+- Mode sombre / mode clair avec toggle
+- Design premium (glassmorphism, dégradés, animations)
+- Chargement optimisé avec progression ville par ville
+- Gestion des erreurs réseau
